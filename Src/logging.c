@@ -65,3 +65,8 @@ static void LoggingTask()
 		//TODO
 	}
 }
+
+void ISR_LoggingUARTTx()
+{
+
+}

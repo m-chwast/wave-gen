@@ -21,6 +21,7 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
+#include "logging.h"
 
 /* USER CODE END 0 */
 
@@ -115,5 +116,13 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart)
+{
+	if(huart == &huart2)
+	{
+		ISR_LoggingUARTTx();
+	}
+}
 
 /* USER CODE END 1 */
