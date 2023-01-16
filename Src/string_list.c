@@ -10,17 +10,41 @@ StringList StringList_Create()
 }
 
 
-void StringList_AddElem(StringList * list, const char * str)
+void StringList_AddElem(StringList list, char * str)
 {
+	struct StringListElem * newElem = pvPortMalloc(sizeof(struct StringListElem));
+	char * newStr = pvPortMalloc(strlen(str) + 1);
+	strcpy(newStr, str);
 
+	newElem->str = newStr;
+	newElem->next = NULL;
+
+	if(list != NULL)
+	{
+		while(list->next != NULL)
+			list = list->next;
+
+	}
+	list = newElem;
 }
 
-char * StringList_GetFirstElem()
+char * StringList_GetFirstElem(StringList list)
 {
-
+	if(list == NULL)
+		return NULL;
+	return list->str;
 }
 
-void StringList_DeleteElem()
+void StringList_DeleteElem(StringList list)
 {
+	if(list == NULL)
+		return;
 
+	StringList newHead = list->next;
+
+	if(list->str != NULL)
+		vPortFree(list->str);
+	vPortFree(list);
+
+	list = newHead;
 }
