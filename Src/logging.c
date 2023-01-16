@@ -7,6 +7,14 @@
 #define TASK_NAME "Logging Task"
 
 
+struct MessageBuffer
+{
+	const char ** messages;
+	uint8_t count;
+};
+
+volatile static const char * currentMessage;
+
 static void LoggingTask();
 
 
@@ -50,6 +58,8 @@ void Logging_Error(const char * message)
 
 static void LoggingTask()
 {
+	struct MessageBuffer messageBuffer;
+
 	while(true)
 	{
 		//TODO
