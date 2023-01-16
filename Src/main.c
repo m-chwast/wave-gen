@@ -24,6 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "logging.h"
 
 /* USER CODE END Includes */
 
@@ -89,6 +90,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  Setup_Logging_CreateTask();
 
   /* USER CODE END 2 */
 
