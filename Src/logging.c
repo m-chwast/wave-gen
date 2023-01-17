@@ -1,22 +1,18 @@
 #include "logging.h"
 #include "cmsis_os.h"
 #include "usart.h"
+#include "string_list.h"
 #include <string.h>
 
 
 #define TASK_NAME "Logging Task"
 
 
-struct MessageBuffer
-{
-	const char ** messages;
-	uint8_t count;
-};
+StringList messageBuffer = NULL;
 
-volatile static const char * currentMessage;
 
 static void LoggingTask();
-
+static void LogWithPrefix(const char * prefix, const char * message);
 
 bool Setup_Logging_CreateTask()
 {
@@ -37,28 +33,35 @@ void Logging_LogBlocking(const char * message)
 
 void Logging_Log(const char * message)
 {
-	//TODO
+	StringList_AddElem(&messageBuffer, message);
 }
 
 void Logging_Info(const char * message)
 {
-	//TODO
+	LogWithPrefix("[INFO]", message);
 }
 
 void Logging_Warn(const char * message)
 {
-	//TODO
+	LogWithPrefix("[WARN]", message);
 }
 
 void Logging_Error(const char * message)
 {
-	//TODO
+	LogWithPrefix("[ERROR]", message);
 }
 
+static void LogWithPrefix(const char * prefix, const char * message)
+{
+	char msgWithPrefix[strlen(prefix) + strlen(message) + 1];
+	strcpy(msgWithPrefix, prefix);
+	strcat(msgWithPrefix, message);
+	Logging_Log(msgWithPrefix);
+}
 
 static void LoggingTask()
 {
-	struct MessageBuffer messageBuffer;
+
 
 	while(true)
 	{
