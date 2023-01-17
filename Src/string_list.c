@@ -10,7 +10,7 @@ StringList StringList_Create()
 }
 
 
-void StringList_AddElem(StringList * list, char * str)
+void StringList_AddElem(StringList * list, const char * str)
 {
 	struct StringListElem * newElem = pvPortMalloc(sizeof(struct StringListElem));
 	char * newStr = pvPortMalloc(strlen(str) + 1);
@@ -32,7 +32,7 @@ void StringList_AddElem(StringList * list, char * str)
 	}
 }
 
-char * StringList_GetFirstElem(StringList list)
+char * StringList_GetFirstElem(const StringList list)
 {
 	if(list == NULL)
 		return NULL;
