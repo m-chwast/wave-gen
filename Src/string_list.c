@@ -52,3 +52,25 @@ void StringList_DeleteElem(StringList * list)
 
 	*list = newHead;
 }
+
+uint16_t StringList_GetElemsCount(StringList list)
+{
+	uint16_t cnt = 0;
+	while(list != NULL)
+	{
+		cnt++;
+		list = list->next;
+	}
+	return cnt;
+}
+
+uint32_t StringList_GetCharsCount(StringList list)
+{
+	uint32_t cnt = 0;
+	while(list != NULL)
+	{
+		cnt += strlen(list->str);
+		list = list->next;
+	}
+	return cnt;
+}
