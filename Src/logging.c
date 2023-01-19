@@ -84,8 +84,15 @@ static void LoggingTask()
 		}
 		else
 		{
-			//sending not completed or nothing to send
-			//TODO
+			if(UART_IsTransmitting(&huart2) == false) //nothing is being sent now
+			{
+				//in case something is left in the buffer
+				if(StringList_GetFirstElem(messageBuffer) != NULL)
+				{
+					sendingInProgress = false;
+					StartSendingNextMessage();
+				}
+			}
 		}
 	}
 }

@@ -125,4 +125,13 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart)
 	}
 }
 
+bool UART_IsTransmitting(UART_HandleTypeDef * huart)
+{
+	HAL_UART_StateTypeDef state = HAL_UART_GetState(huart);
+	if(state == HAL_UART_STATE_BUSY_TX
+			|| state == HAL_UART_STATE_BUSY_TX_RX)
+		return true;
+	return false;
+}
+
 /* USER CODE END 1 */
