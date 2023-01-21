@@ -4,6 +4,9 @@
 #include <stdbool.h>
 
 
+#define LOG_DEBUG_STATS true
+
+
 bool Setup_Logging_CreateTask();
 void ISR_LoggingUARTTx();
 

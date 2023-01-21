@@ -5,10 +5,12 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 #define TASK_NAME "Logging Task"
 #define MAX_TX_TIME 50
+
 #define VERBOSE_LOGGING true
 
 
@@ -23,7 +25,7 @@ static void StartSendingNextMessage();
 
 bool Setup_Logging_CreateTask()
 {
-	BaseType_t res = xTaskCreate(LoggingTask, TASK_NAME, 128, NULL, 0, NULL);
+	BaseType_t res = xTaskCreate(LoggingTask, TASK_NAME, 256, NULL, 0, NULL);
 	if(res != pdPASS)
 	{
 		Logging_LogBlocking("[ERROR]" TASK_NAME " was not created.\r\n");
@@ -59,15 +61,25 @@ void Logging_Error(const char * message)
 	LogWithPrefix("[ERROR]", message);
 }
 
+void Logging_InfoWithNum(const char * message, int32_t num)
+{
+	char buff[strlen(message) + 12 + 2];
+	strcpy(buff, message);
+	itoa(num, buff + strlen(message), 10);
+	strcat(buff, "\r\n");
+	Logging_Info(buff);
+}
+
 static void LogWithPrefix(const char * prefix, const char * message)
 {
 	char buffer_stats[30];
-#if VERBOSE_LOGGING == true
-	snprintf(buffer_stats, sizeof(buffer_stats), "(msg: %d, chr: %d): ",
-			(int)StringList_GetElemsCount(messageBuffer) + 1,
-			(int)StringList_GetCharsCount(messageBuffer) +
-			strlen(prefix) + strlen(message));
-#endif
+	if(VERBOSE_LOGGING == true)
+	{
+		snprintf(buffer_stats, sizeof(buffer_stats), "(msg: %d, chr: %d): ",
+				(int)StringList_GetElemsCount(messageBuffer) + 1,
+				(int)StringList_GetCharsCount(messageBuffer) +
+				strlen(prefix) + strlen(message));
+	}
 	uint16_t len = strlen(prefix) + strlen(message) + strlen(buffer_stats) + 1;
 	char msgWithPrefix[len];
 	strcpy(msgWithPrefix, prefix);
@@ -104,6 +116,18 @@ static void LoggingTask()
 					StartSendingNextMessage();
 				}
 			}
+		}
+
+		if(LOG_DEBUG_STATS == true)
+		{
+			static uint8_t cnt;
+			if(cnt >= 100)
+			{
+				Logging_InfoWithNum("Max """ TASK_NAME """ stack size: ",
+						uxTaskGetStackHighWaterMark(NULL));
+				cnt = 0;
+			}
+			cnt++;
 		}
 	}
 }
