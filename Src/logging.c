@@ -138,6 +138,14 @@ static void LoggingTask()
 			{
 				Logging_InfoWithNum("Max """ TASK_NAME """ stack size: ",
 						uxTaskGetStackHighWaterMark(NULL));
+				char * taskListStr = pvPortMalloc(512);
+				if(taskListStr != NULL)
+				{
+					strcpy(taskListStr, "Task List:\r\n");
+					vTaskList(taskListStr + strlen(taskListStr));
+					Logging_Log(taskListStr);
+					vPortFree(taskListStr);
+				}
 			}
 		}
 	}
