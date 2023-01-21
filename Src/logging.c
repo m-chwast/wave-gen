@@ -4,10 +4,12 @@
 #include "string_list.h"
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 
 
 #define TASK_NAME "Logging Task"
 #define MAX_TX_TIME 50
+#define VERBOSE_LOGGING true
 
 
 static StringList messageBuffer = NULL;
@@ -59,8 +61,17 @@ void Logging_Error(const char * message)
 
 static void LogWithPrefix(const char * prefix, const char * message)
 {
-	char msgWithPrefix[strlen(prefix) + strlen(message) + 1];
+	char buffer_stats[30];
+#if VERBOSE_LOGGING == true
+	snprintf(buffer_stats, sizeof(buffer_stats), "(msg: %d, chr: %d): ",
+			(int)StringList_GetElemsCount(messageBuffer) + 1,
+			(int)StringList_GetCharsCount(messageBuffer) +
+			strlen(prefix) + strlen(message));
+#endif
+	uint16_t len = strlen(prefix) + strlen(message) + strlen(buffer_stats) + 1;
+	char msgWithPrefix[len];
 	strcpy(msgWithPrefix, prefix);
+	strcat(msgWithPrefix, buffer_stats);
 	strcat(msgWithPrefix, message);
 	Logging_Log(msgWithPrefix);
 }
