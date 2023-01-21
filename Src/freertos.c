@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <tim.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,12 +73,13 @@ void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTaskName);
 /* Functions needed when configGENERATE_RUN_TIME_STATS is on */
 __weak void configureTimerForRunTimeStats(void)
 {
-
+	htim6.Instance->CNT = 0;
+	tim6updateCnt = 0;
 }
 
 __weak unsigned long getRunTimeCounterValue(void)
 {
-return 0;
+	return htim6.Instance->CNT + 0xFFFF * tim6updateCnt;
 }
 /* USER CODE END 1 */
 

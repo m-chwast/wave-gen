@@ -144,6 +144,10 @@ static void LoggingTask()
 					strcpy(taskListStr, "Task List:\r\n");
 					vTaskList(taskListStr + strlen(taskListStr));
 					Logging_Log(taskListStr);
+					taskListStr[0] = '\0';
+					strcpy(taskListStr, "Task Runtime Stats:\r\n");
+					vTaskGetRunTimeStats(taskListStr + strlen(taskListStr));
+					Logging_Log(taskListStr);
 					vPortFree(taskListStr);
 				}
 			}
