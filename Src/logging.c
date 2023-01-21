@@ -10,18 +10,22 @@
 
 #define TASK_NAME "Logging Task"
 #define MAX_TX_TIME 50
+#define LOGGING_TIMER_PERIOD pdMS_TO_TICKS(5000)
 
 #define VERBOSE_LOGGING true
 
 
 static StringList messageBuffer = NULL;
 static SemaphoreHandle_t txCpltSemaphore = NULL;
+static SemaphoreHandle_t loggingTimerSemaphore = NULL;
 static bool sendingInProgress;
 
 
 static void LoggingTask();
 static void LogWithPrefix(const char * prefix, const char * message);
 static void StartSendingNextMessage();
+static void LoggingTimerCallback(TimerHandle_t timer);
+
 
 bool Setup_Logging_CreateTask()
 {
@@ -91,7 +95,17 @@ static void LogWithPrefix(const char * prefix, const char * message)
 static void LoggingTask()
 {
 	txCpltSemaphore = xSemaphoreCreateBinary();
+	loggingTimerSemaphore = xSemaphoreCreateBinary();
+
+	TimerHandle_t loggingTimer = xTimerCreate("Logging Timer",
+			LOGGING_TIMER_PERIOD, pdTRUE, NULL, LoggingTimerCallback);
+
 	assert(txCpltSemaphore != NULL);
+	assert(txCpltSemaphore != NULL);
+	assert(loggingTimer != NULL);
+
+	if(xTimerStart(loggingTimer, pdMS_TO_TICKS(200)) != pdPASS)
+		Logging_Error("Couldn't start Logging Timer!\r\n");
 
 	StartSendingNextMessage();
 
@@ -118,16 +132,13 @@ static void LoggingTask()
 			}
 		}
 
-		if(LOG_DEBUG_STATS == true)
+		if(xSemaphoreTake(loggingTimerSemaphore, 0) == pdPASS)	//timer expired
 		{
-			static uint8_t cnt;
-			if(cnt >= 100)
+			if(LOG_DEBUG_STATS == true)
 			{
 				Logging_InfoWithNum("Max """ TASK_NAME """ stack size: ",
 						uxTaskGetStackHighWaterMark(NULL));
-				cnt = 0;
 			}
-			cnt++;
 		}
 	}
 }
@@ -152,4 +163,9 @@ void ISR_LoggingUARTTx()
 	BaseType_t higherPriorityTaskWoken = pdFALSE;
 	xSemaphoreGiveFromISR(txCpltSemaphore, &higherPriorityTaskWoken);
 	portYIELD_FROM_ISR(higherPriorityTaskWoken);
+}
+
+static void LoggingTimerCallback(TimerHandle_t timer)
+{
+	xSemaphoreGive(loggingTimerSemaphore);
 }
