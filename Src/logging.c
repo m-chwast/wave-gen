@@ -9,6 +9,8 @@
 
 
 #define TASK_NAME "Logging Task"
+#define TASK_STACK_SIZE 256
+
 #define MAX_TX_TIME 50
 #define LOGGING_TIMER_PERIOD pdMS_TO_TICKS(5000)
 
@@ -29,7 +31,8 @@ static void LoggingTimerCallback(TimerHandle_t timer);
 
 bool Setup_Logging_CreateTask()
 {
-	BaseType_t res = xTaskCreate(LoggingTask, TASK_NAME, 256, NULL, 0, NULL);
+	BaseType_t res;
+	res = xTaskCreate(LoggingTask, TASK_NAME, TASK_STACK_SIZE, NULL, 0, NULL);
 	if(res != pdPASS)
 	{
 		Logging_LogBlocking("[ERROR]" TASK_NAME " was not created.\r\n");

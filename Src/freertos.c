@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <tim.h>
+#include "logging.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -89,6 +90,9 @@ __weak void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTask
    /* Run time stack overflow checking is performed if
    configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2. This hook function is
    called if a stack overflow is detected. */
+	Logging_LogBlocking("Stack overflow! Task: ");
+	Logging_LogBlocking((char *)pcTaskName);
+	Logging_LogBlocking("\r\n");
 }
 /* USER CODE END 4 */
 
