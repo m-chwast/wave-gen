@@ -25,6 +25,16 @@ bool Setup_Encoder_CreateTask()
 	return true;
 }
 
+Encoder_Movement Encoder_GetMovement()
+{
+
+}
+
+bool Encoder_IsButtonPressed()
+{
+
+}
+
 
 static void EncoderTask()
 {
