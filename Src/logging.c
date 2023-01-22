@@ -53,6 +53,15 @@ void Logging_Log(const char * message)
 	StartSendingNextMessage();
 }
 
+void Logging_LogWithNum(const char * message, int32_t num)
+{
+	char buff[strlen(message) + 12 + 2];
+	strcpy(buff, message);
+	itoa(num, buff + strlen(message), 10);
+	strcat(buff, "\r\n");
+	Logging_Log(buff);
+}
+
 void Logging_Info(const char * message)
 {
 	LogWithPrefix("[INFO]", message);
@@ -139,8 +148,7 @@ static void LoggingTask()
 		{
 			if(LOG_DEBUG_STATS == true)
 			{
-				Logging_InfoWithNum("Max """ TASK_NAME """ stack size: ",
-						uxTaskGetStackHighWaterMark(NULL));
+				Logging_Log("============================================\r\n");
 				char * taskListStr = pvPortMalloc(512);
 				if(taskListStr != NULL)
 				{
@@ -148,10 +156,13 @@ static void LoggingTask()
 					vTaskList(taskListStr + strlen(taskListStr));
 					Logging_Log(taskListStr);
 					taskListStr[0] = '\0';
-					strcpy(taskListStr, "Task Runtime Stats:\r\n");
+					strcpy(taskListStr, "\r\nTask Runtime Stats:\r\n");
 					vTaskGetRunTimeStats(taskListStr + strlen(taskListStr));
 					Logging_Log(taskListStr);
 					vPortFree(taskListStr);
+					Logging_LogWithNum("\r\nMinimum Heap Size: ",
+							xPortGetMinimumEverFreeHeapSize());
+					Logging_Log("============================================\r\n");
 				}
 			}
 		}
