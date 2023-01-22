@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "logging.h"
+#include "encoder.h"
 
 /* USER CODE END Includes */
 
@@ -96,6 +97,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim6);
 
   Setup_Logging_CreateTask();
+  Setup_Encoder_CreateTask();
 
   /* USER CODE END 2 */
 
