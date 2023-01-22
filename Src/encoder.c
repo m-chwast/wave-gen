@@ -110,7 +110,12 @@ static void UpdateEncoderState()
 
 	currentMovement.exactStepsDelta = steps;
 
-	currentMovement.speed = ENCODER_SPEED_SLOW;	//TODO implement speed
+	if(steps == 1)
+		currentMovement.speed = ENCODER_SPEED_SLOW;
+	else if(steps <= 3)
+		currentMovement.speed = ENCODER_SPEED_MEDIUM;
+	else if(steps > 3)
+		currentMovement.speed = ENCODER_SPEED_HIGH;
 
 	taskENTER_CRITICAL();
 	encoderMovement = currentMovement;
@@ -124,9 +129,9 @@ static void LogEncoderParams()
 
 	const char * dirMsg;
 	if(encoderMovement.dir == ENCODER_DIR_LEFT)
-		dirMsg = "moving left";
+		dirMsg = "left";
 	else if(encoderMovement.dir == ENCODER_DIR_RIGHT)
-		dirMsg = "moving right";
+		dirMsg = "right";
 
 	Logging_Info("Encoder movement: ");
 	Logging_Log(dirMsg);
