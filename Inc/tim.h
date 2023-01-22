@@ -36,12 +36,15 @@ extern TIM_HandleTypeDef htim3;
 
 extern TIM_HandleTypeDef htim6;
 
+extern TIM_HandleTypeDef htim10;
+
 /* USER CODE BEGIN Private defines */
 extern uint16_t tim6updateCnt;
 /* USER CODE END Private defines */
 
 void MX_TIM3_Init(void);
 void MX_TIM6_Init(void);
+void MX_TIM10_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
