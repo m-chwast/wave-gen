@@ -1,5 +1,8 @@
 #include "logging.h"
-#include "cmsis_os.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "timers.h"
 #include "usart.h"
 #include "string_list.h"
 #include <string.h>
