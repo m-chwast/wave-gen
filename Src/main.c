@@ -95,6 +95,7 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim6);
+  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
   Setup_Logging_CreateTask();
   Setup_Encoder_CreateTask();
