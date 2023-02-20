@@ -27,7 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "logging.h"
 #include "encoder.h"
-#include "screen/st7920.h"
+#include "screen/lcd.h"
 
 /* USER CODE END Includes */
 
@@ -101,9 +101,9 @@ int main(void)
 
   Setup_Logging_CreateTask();
   Setup_Encoder_CreateTask();
+  Setup_Lcd_CreateTask();
 
-  ST7920_Init();	//TODO test code
-  ST7920_SendStringBlocking("Hello World!");
+
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
