@@ -22,6 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "logging.h"
+#include "serial_receiver.h"
 
 /* USER CODE END 0 */
 
@@ -122,6 +123,14 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart)
 	if(huart == &huart2)
 	{
 		ISR_LoggingUARTTx();
+	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart)
+{
+	if(huart == &huart2)
+	{
+		ISR_SerialReceiver_RxCplt();
 	}
 }
 

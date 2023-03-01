@@ -6,6 +6,6 @@
 
 
 bool Setup_SerialReceiver_CreateTask();
-
+void ISR_SerialReceiver_RxCplt();
 
 #endif
