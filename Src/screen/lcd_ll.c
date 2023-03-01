@@ -30,7 +30,7 @@ void ST7920_Init()
 	ST7920_SetEntryMode();
 	vTaskDelay(pdMS_TO_TICKS(10));
 	ST7920_SendHomeCommand();
-	vTaskDelay(pdMS_TO_TICKS(50));
+	vTaskDelay(pdMS_TO_TICKS(10));
 }
 
 void ST7920_SendStringBlocking(const char * str)
@@ -40,9 +40,46 @@ void ST7920_SendStringBlocking(const char * str)
 		ST7920_SendDataByte(str[i]);
 		HAL_Delay(1);
 	}
-	if((strlen(str) % 2) != 0)	//because single lcd address contains two characters
+}
+
+void ST7920_SendText(const char * text, uint8_t x, uint8_t y)
+{
+	ST7920_SetTextPos(x, y);
+	vTaskDelay(1);
+	if(strlen(text) % 2)
 	{
 		ST7920_SendDataByte(' ');
-		HAL_Delay(1);
+		vTaskDelay(1);
 	}
+	for(uint8_t i = 0; i < strlen(text); i++)
+	{
+		ST7920_SendDataByte(text[i]);
+		vTaskDelay(1);
+	}
+
+}
+
+void ST7920_SetTextPos(uint8_t x, uint8_t y)
+{
+	if(x > 15)
+		x = 15;
+	if(y > 3)
+		y = 3;
+
+	uint8_t addr = x / 2;
+	switch(y)
+	{
+		case 1:
+			addr += 16;
+			break;
+		case 2:
+			addr += 8;
+			break;
+		case 3:
+			addr += 24;
+			break;
+		default:
+			break;
+	}
+	ST7920_SetAddress(addr);
 }

@@ -31,9 +31,10 @@ bool Setup_Lcd_CreateTask()
 static void LcdTask()
 {
 	ST7920_Init();
-	ST7920_SendStringBlocking("Hello World!");
-	vTaskDelay(pdMS_TO_TICKS(1000));
-	ST7920_SendStringBlocking("Now this!");
+	ST7920_SendText("1 line12", 0, 0);
+	ST7920_SendText("2 line123", 1, 1);
+	ST7920_SendText("3 line12", 2, 2);
+	ST7920_SendText("4 line123", 3, 3);
 
 	while(true)
 	{
