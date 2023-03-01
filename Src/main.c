@@ -28,6 +28,7 @@
 #include "logging.h"
 #include "encoder.h"
 #include "screen/lcd.h"
+#include "serial_receiver.h"
 
 /* USER CODE END Includes */
 
@@ -102,6 +103,7 @@ int main(void)
   Setup_Logging_CreateTask();
   Setup_Encoder_CreateTask();
   Setup_Lcd_CreateTask();
+  Setup_SerialReceiver_CreateTask();
 
 
   /* USER CODE END 2 */
