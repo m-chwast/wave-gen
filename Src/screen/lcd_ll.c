@@ -83,3 +83,9 @@ void ST7920_SetTextPos(uint8_t x, uint8_t y)
 	}
 	ST7920_SetAddress(addr);
 }
+
+void ST7920_ClearAll()
+{
+	ST7920_SendClearCommand();
+	vTaskDelay(1);
+}

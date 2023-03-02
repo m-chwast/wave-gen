@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "screen/menu.h"
 
 
 #define TASK_STACK_SIZE 256
@@ -31,6 +32,7 @@ bool Setup_Lcd_CreateTask()
 static void LcdTask()
 {
 	ST7920_Init();
+	Menu_Display();
 
 	while(true)
 	{

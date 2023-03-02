@@ -45,3 +45,43 @@ static const MenuElement menuMode =
 		.prev = &menuRun,
 		.next = NULL,
 };
+
+
+//initialize with start menu
+static const MenuElement * currentMenu = &menuRun;
+static uint8_t currentLine = 0;
+
+
+static const MenuElement * FindFirstElemToDisplay()
+{
+	if(currentLine > 3)
+		currentLine = 3;
+	if(currentMenu == NULL)
+		return NULL;
+
+	const MenuElement * first = currentMenu;
+	for(int i = 0; i < currentLine; i++)
+	{
+		if(first->prev == NULL)
+			break;
+		first = first->prev;
+	}
+	return first;
+}
+
+void Menu_Display()
+{
+	const MenuElement * menuElem = FindFirstElemToDisplay();
+	if(menuElem == NULL)
+		return;
+
+	ST7920_ClearAll();
+
+	for(uint8_t i = 0; i < 4; i++)
+	{
+		ST7920_SendText(menuElem->text, 1, i);
+		if(menuElem->next == NULL)
+			break;
+		menuElem = menuElem->next;
+	}
+}
