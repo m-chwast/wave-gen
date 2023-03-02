@@ -37,5 +37,6 @@ static void LcdTask()
 	while(true)
 	{
 		vTaskDelay(TASK_DELAY_TIME);
+		Menu_Display();
 	}
 }

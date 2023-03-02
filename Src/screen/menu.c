@@ -91,3 +91,50 @@ void Menu_Display()
 		menuElem = menuElem->next;
 	}
 }
+
+static void RefreshRequest()
+{
+
+}
+
+void Menu_SelectNext()
+{
+	if(currentLine < 3)
+		currentLine++;
+	if(currentMenu->next != NULL)
+	{
+		currentMenu = currentMenu->next;
+	}
+	else
+	{
+		const MenuElement * tmp = currentMenu;
+		while(tmp->prev != NULL)
+			tmp = tmp->prev;
+		currentLine = 0;
+		currentMenu = tmp;
+	}
+	RefreshRequest();
+}
+
+void Menu_SelectPrev()
+{
+	if(currentLine > 0)
+		currentLine--;
+	if(currentMenu->prev != NULL)
+	{
+		currentMenu = currentMenu->prev;
+	}
+	else
+	{
+		const MenuElement * tmp = currentMenu;
+		uint8_t menuCnt = 0;
+		while(tmp->next != NULL)
+		{
+			tmp = tmp->next;
+			menuCnt++;
+		}
+		currentLine = menuCnt > 3 ? 3 : menuCnt;
+		currentMenu = tmp;
+	}
+	RefreshRequest();
+}

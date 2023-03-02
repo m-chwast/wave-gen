@@ -4,6 +4,7 @@
 #include "task.h"
 #include "main.h"
 #include "tim.h"
+#include "screen/menu.h"
 
 
 #define TASK_STACK_SIZE 256
@@ -20,7 +21,7 @@ static Encoder_Movement encoderMovement;
 static void EncoderTask();
 static void UpdateEncoderState();
 static void LogEncoderParams();
-
+static void ProcessEncoderState();
 
 bool Setup_Encoder_CreateTask()
 {
@@ -59,6 +60,7 @@ static void EncoderTask()
 	while(true)
 	{
 		UpdateEncoderState();
+		ProcessEncoderState();
 		LogEncoderParams();
 		vTaskDelay(TASK_DELAY_TIME);
 	}
@@ -120,6 +122,17 @@ static void UpdateEncoderState()
 	taskENTER_CRITICAL();
 	encoderMovement = currentMovement;
 	taskEXIT_CRITICAL();
+}
+
+static void ProcessEncoderState()
+{
+	if(encoderMovement.dir == ENCODER_DIR_STOPPED)
+		return;
+
+	if(encoderMovement.dir == ENCODER_DIR_LEFT)
+		Menu_SelectPrev();
+	else if(encoderMovement.dir == ENCODER_DIR_RIGHT)
+		Menu_SelectNext();
 }
 
 static void LogEncoderParams()

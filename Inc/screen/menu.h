@@ -3,6 +3,8 @@
 
 
 void Menu_Display();
+void Menu_SelectNext();
+void Menu_SelectPrev();
 
 
 #endif
