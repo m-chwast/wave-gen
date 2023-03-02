@@ -1,6 +1,6 @@
 #include "screen/menu.h"
 #include "screen/lcd_ll.h"
-#include <stddef.h>
+#include <string.h>
 
 
 typedef enum
@@ -77,9 +77,15 @@ void Menu_Display()
 
 	ST7920_ClearAll();
 
+	char lineToDisplay[16] = {0};
+
 	for(uint8_t i = 0; i < 4; i++)
 	{
-		ST7920_SendText(menuElem->text, 1, i);
+		memset(lineToDisplay, '\0', sizeof(lineToDisplay));
+		if(menuElem == currentMenu)
+			strcpy(lineToDisplay, ">");
+		strncat(lineToDisplay, menuElem->text, sizeof(lineToDisplay) - 1);
+		ST7920_SendText(lineToDisplay, 1, i);
 		if(menuElem->next == NULL)
 			break;
 		menuElem = menuElem->next;
