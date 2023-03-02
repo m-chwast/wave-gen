@@ -3,13 +3,18 @@
 #include "logging.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 #include "screen/menu.h"
+#include <assert.h>
 
 
 #define TASK_STACK_SIZE 256
 #define TASK_NAME "LCD Task"
 #define TASK_PRIORITY 1
-#define TASK_DELAY_TIME pdMS_TO_TICKS(50)
+#define TASK_DELAY_TIME pdMS_TO_TICKS(500)
+
+
+static SemaphoreHandle_t lcdRefreshSemaphore = NULL;
 
 
 static void LcdTask();
@@ -31,12 +36,21 @@ bool Setup_Lcd_CreateTask()
 
 static void LcdTask()
 {
+	lcdRefreshSemaphore = xSemaphoreCreateBinary();
+	assert(lcdRefreshSemaphore != NULL);
+
 	ST7920_Init();
 	Menu_Display();
 
 	while(true)
 	{
-		vTaskDelay(TASK_DELAY_TIME);
+		xSemaphoreTake(lcdRefreshSemaphore, TASK_DELAY_TIME);
 		Menu_Display();
 	}
 }
+
+void Lcd_RefreshRequest()
+{
+	xSemaphoreGive(lcdRefreshSemaphore);
+}
+

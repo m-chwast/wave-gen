@@ -1,5 +1,6 @@
 #include "screen/menu.h"
 #include "screen/lcd_ll.h"
+#include "screen/lcd.h"
 #include <string.h>
 
 
@@ -92,11 +93,6 @@ void Menu_Display()
 	}
 }
 
-static void RefreshRequest()
-{
-
-}
-
 void Menu_SelectNext()
 {
 	if(currentLine < 3)
@@ -113,7 +109,7 @@ void Menu_SelectNext()
 		currentLine = 0;
 		currentMenu = tmp;
 	}
-	RefreshRequest();
+	Lcd_RefreshRequest();
 }
 
 void Menu_SelectPrev()
@@ -136,5 +132,5 @@ void Menu_SelectPrev()
 		currentLine = menuCnt > 3 ? 3 : menuCnt;
 		currentMenu = tmp;
 	}
-	RefreshRequest();
+	Lcd_RefreshRequest();
 }

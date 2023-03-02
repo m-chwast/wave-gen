@@ -6,5 +6,6 @@
 
 bool Setup_Lcd_CreateTask();
 
+void Lcd_RefreshRequest();
 
 #endif
