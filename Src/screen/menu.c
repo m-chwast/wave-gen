@@ -51,6 +51,7 @@ static const MenuElement menuMode =
 //initialize with start menu
 static const MenuElement * currentMenu = &menuRun;
 static uint8_t currentLine = 0;
+static bool clearBeforeDrawing = true;
 
 
 static const MenuElement * FindFirstElemToDisplay()
@@ -76,7 +77,11 @@ void Menu_Display()
 	if(menuElem == NULL)
 		return;
 
-	ST7920_ClearAll();
+	if(clearBeforeDrawing != false)
+	{
+		ST7920_ClearAll();
+		clearBeforeDrawing = false;
+	}
 
 	char lineToDisplay[16] = {0};
 
@@ -97,6 +102,9 @@ void Menu_SelectNext()
 {
 	if(currentLine < 3)
 		currentLine++;
+	else
+		clearBeforeDrawing = true;
+
 	if(currentMenu->next != NULL)
 	{
 		currentMenu = currentMenu->next;
@@ -116,6 +124,7 @@ void Menu_SelectPrev()
 {
 	if(currentLine > 0)
 		currentLine--;
+
 	if(currentMenu->prev != NULL)
 	{
 		currentMenu = currentMenu->prev;
@@ -129,7 +138,15 @@ void Menu_SelectPrev()
 			tmp = tmp->next;
 			menuCnt++;
 		}
-		currentLine = menuCnt > 3 ? 3 : menuCnt;
+		if(menuCnt > 3)
+		{
+			currentLine = 3;
+			clearBeforeDrawing = true;
+		}
+		else
+		{
+			currentLine = menuCnt;
+		}
 		currentMenu = tmp;
 	}
 	Lcd_RefreshRequest();
