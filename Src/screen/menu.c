@@ -43,6 +43,7 @@ typedef struct MenuElementStruct
 
 static const MenuElement menuRun;
 static const MenuElement menuMode;
+static const MenuElement waveSetup;
 
 static const MenuElement menuRun =
 {
@@ -61,6 +62,16 @@ static const MenuElement menuMode =
 		.parent = NULL,
 		.submenu = NULL,
 		.prev = &menuRun,
+		.next = &waveSetup,
+};
+
+static const MenuElement waveSetup =
+{
+		.text = "Wave Setup",
+		.callback = NULL,
+		.parent = NULL,
+		.submenu = NULL,
+		.prev = &menuMode,
 		.next = NULL,
 };
 
