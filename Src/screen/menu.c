@@ -17,7 +17,6 @@ typedef struct
 {
 	MenuElementValueType valueType;
 	bool isSelectable;
-
 } MenuElementProperties;
 
 typedef union
@@ -40,10 +39,12 @@ typedef struct MenuElementStruct
 	const struct MenuElementStruct * next;
 } MenuElement;
 
+static void Callback_WaveSetup_Type();
 
 static const MenuElement menuRun;
 static const MenuElement menuMode;
 static const MenuElement waveSetup;
+static const MenuElement waveSetup_type;
 
 static const MenuElement menuRun =
 {
@@ -70,8 +71,19 @@ static const MenuElement waveSetup =
 		.text = "Wave Setup",
 		.callback = NULL,
 		.parent = NULL,
-		.submenu = NULL,
+		.submenu = &waveSetup_type,
 		.prev = &menuMode,
+		.next = NULL,
+};
+
+static const MenuElement waveSetup_type =
+{
+		.text = "Type",
+		.properties.valueType = VALUE_TYPE_UINT,
+		.callback = Callback_WaveSetup_Type,
+		.parent = &menuRun,
+		.submenu = NULL,
+		.prev = NULL,
 		.next = NULL,
 };
 
@@ -177,4 +189,9 @@ void Menu_SelectPrev()
 		currentMenu = tmp;
 	}
 	Lcd_RefreshRequest();
+}
+
+static void Callback_WaveSetup_Type()
+{
+
 }
