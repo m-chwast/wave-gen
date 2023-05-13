@@ -193,12 +193,18 @@ void Menu_SelectPrev()
 
 void Menu_GoToSubmenu()
 {
-
+	if(currentMenu->submenu == NULL)
+		return;
+	currentMenu = currentMenu->submenu;
+	currentLine = 0;
+	clearBeforeDrawing = true;
+	Lcd_RefreshRequest();
 }
 
 void Menu_InvokeAction()
 {
-
+	if(currentMenu->submenu != NULL)
+		Menu_GoToSubmenu();
 }
 
 static void Callback_WaveSetup_Type()
