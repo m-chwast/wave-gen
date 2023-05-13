@@ -4,8 +4,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
-#include "screen/menu.h"
 #include <assert.h>
+#include <screen/menu/menu.h>
 
 
 #define TASK_STACK_SIZE 256
@@ -40,6 +40,7 @@ static void LcdTask()
 	assert(lcdRefreshSemaphore != NULL);
 
 	ST7920_Init();
+	Menu_Init();
 	Menu_Display();
 
 	while(true)

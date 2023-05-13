@@ -1,10 +1,10 @@
+#include <screen/menu/menu.h>
 #include "encoder.h"
 #include "logging.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
 #include "tim.h"
-#include "screen/menu.h"
 
 
 #define TASK_STACK_SIZE 256

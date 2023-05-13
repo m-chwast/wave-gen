@@ -2,6 +2,7 @@
 #define _SCREEN_MENU_H_
 
 
+void Menu_Init();
 void Menu_Display();
 void Menu_SelectNext();
 void Menu_SelectPrev();

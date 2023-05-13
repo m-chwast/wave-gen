@@ -1,102 +1,15 @@
-#include "screen/menu.h"
+#include <screen/menu/menu.h>
+#include <screen/menu/menu_elements.h>
 #include "screen/lcd_ll.h"
 #include "screen/lcd.h"
 #include <string.h>
 
 
-typedef enum
-{
-	VALUE_TYPE_NONE = 0,
-	VALUE_TYPE_UINT,
-	VALUE_TYPE_INT,
-	VALUE_TYPE_FLOAT,
-	VALUE_TYPE_BOOL,
-	VALUE_TYPE_WAVE_TYPE,
-} MenuElementValueType;
-
-typedef struct
-{
-	MenuElementValueType valueType;
-	bool isSelectable;
-} MenuElementProperties;
-
-typedef union
-{
-	uint32_t uintData;
-	int32_t intData;
-	float floatData;
-	bool boolData;
-} MenuElementValue;
-
-typedef struct MenuElementStruct
-{
-	const char * text;
-	MenuElementProperties properties;
-	MenuElementValue value;
-	void (*callback)(void);
-	const struct MenuElementStruct * parent;
-	const struct MenuElementStruct * submenu;
-	const struct MenuElementStruct * prev;
-	const struct MenuElementStruct * next;
-} MenuElement;
-
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize);
-static void Callback_WaveSetup_Type();
-
-static const MenuElement menuRun;
-static const MenuElement menuMode;
-static const MenuElement waveSetup;
-static const MenuElement waveSetup_type;
-static const MenuElement waveSetup_return;
-
-static const MenuElement menuRun =
-{
-		.text = "Run",
-		.callback = NULL,
-		.parent = NULL,
-		.submenu = NULL,
-		.prev = NULL,
-		.next = &menuMode,
-};
-
-static const MenuElement menuMode =
-{
-		.text = "Mode Select",
-		.callback = NULL,
-		.parent = NULL,
-		.submenu = NULL,
-		.prev = &menuRun,
-		.next = &waveSetup,
-};
-
-static const MenuElement waveSetup =
-{
-		.text = "Wave Setup...",
-		.callback = NULL,
-		.parent = NULL,
-		.submenu = &waveSetup_type,
-		.prev = &menuMode,
-		.next = NULL,
-};
-
-static const MenuElement waveSetup_type =
-{
-		.text = "Type",
-		.properties.valueType = VALUE_TYPE_WAVE_TYPE,
-		.callback = Callback_WaveSetup_Type,
-		.next = &waveSetup_return,
-};
-
-static const MenuElement waveSetup_return =
-{
-	.text = "Return...",
-	.parent = &menuRun,
-	.prev = &waveSetup_type,
-};
 
 
 //initialize with start menu
-static const MenuElement * currentMenu = &menuRun;
+static const MenuElement * currentMenu = NULL;
 static uint8_t currentLine = 0;
 static bool clearBeforeDrawing = true;
 
@@ -116,6 +29,11 @@ static const MenuElement * FindFirstElemToDisplay()
 		first = first->prev;
 	}
 	return first;
+}
+
+void Menu_Init()
+{
+	currentMenu = MenuElements_initialMenuElement;
 }
 
 void Menu_Display()
@@ -260,9 +178,4 @@ static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t
 	default:
 		break;
 	}
-}
-
-static void Callback_WaveSetup_Type()
-{
-
 }
