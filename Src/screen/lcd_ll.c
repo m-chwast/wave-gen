@@ -46,7 +46,7 @@ void ST7920_SendText(const char * text, uint8_t x, uint8_t y)
 {
 	ST7920_SetTextPos(x, y);
 	vTaskDelay(1);
-	if(strlen(text) % 2)
+	if(x % 2)
 	{
 		ST7920_SendDataByte(' ');
 		vTaskDelay(1);
@@ -56,7 +56,6 @@ void ST7920_SendText(const char * text, uint8_t x, uint8_t y)
 		ST7920_SendDataByte(text[i]);
 		vTaskDelay(1);
 	}
-
 }
 
 void ST7920_SetTextPos(uint8_t x, uint8_t y)

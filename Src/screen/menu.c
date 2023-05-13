@@ -116,10 +116,9 @@ void Menu_Display()
 	for(uint8_t i = 0; i < 4; i++)
 	{
 		memset(lineToDisplay, '\0', sizeof(lineToDisplay));
-		if(menuElem == currentMenu)
-			strcpy(lineToDisplay, ">");
+		strcpy(lineToDisplay, (menuElem == currentMenu) ? ">" : " ");
 		strncat(lineToDisplay, menuElem->text, sizeof(lineToDisplay) - 1);
-		ST7920_SendText(lineToDisplay, 1, i);
+		ST7920_SendText(lineToDisplay, 0, i);
 		if(menuElem->next == NULL)
 			break;
 		menuElem = menuElem->next;
