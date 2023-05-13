@@ -126,6 +126,21 @@ static void UpdateEncoderState()
 
 static void ProcessEncoderState()
 {
+	static bool encButtonWasPressed = false;
+
+	if(Encoder_IsButtonPressed() == true)
+	{
+		if(encButtonWasPressed == false)
+		{
+			encButtonWasPressed = true;
+			Menu_InvokeAction();
+		}
+	}
+	else
+	{
+		encButtonWasPressed = false;
+	}
+
 	if(encoderMovement.dir == ENCODER_DIR_STOPPED)
 		return;
 

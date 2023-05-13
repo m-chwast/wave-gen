@@ -191,6 +191,16 @@ void Menu_SelectPrev()
 	Lcd_RefreshRequest();
 }
 
+void Menu_GoToSubmenu()
+{
+
+}
+
+void Menu_InvokeAction()
+{
+
+}
+
 static void Callback_WaveSetup_Type()
 {
 
