@@ -11,6 +11,7 @@ typedef enum
 	VALUE_TYPE_INT,
 	VALUE_TYPE_FLOAT,
 	VALUE_TYPE_BOOL,
+	VALUE_TYPE_WAVE_TYPE,
 } MenuElementValueType;
 
 typedef struct
@@ -39,6 +40,7 @@ typedef struct MenuElementStruct
 	const struct MenuElementStruct * next;
 } MenuElement;
 
+static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize);
 static void Callback_WaveSetup_Type();
 
 static const MenuElement menuRun;
@@ -80,7 +82,7 @@ static const MenuElement waveSetup =
 static const MenuElement waveSetup_type =
 {
 		.text = "Type",
-		.properties.valueType = VALUE_TYPE_UINT,
+		.properties.valueType = VALUE_TYPE_WAVE_TYPE,
 		.callback = Callback_WaveSetup_Type,
 		.next = &waveSetup_return,
 };
@@ -134,7 +136,14 @@ void Menu_Display()
 	{
 		memset(lineToDisplay, '\0', sizeof(lineToDisplay));
 		strcpy(lineToDisplay, (menuElem == currentMenu) ? ">" : " ");
-		strncat(lineToDisplay, menuElem->text, sizeof(lineToDisplay) - 1);
+		strncat(lineToDisplay, menuElem->text, sizeof(lineToDisplay) - 2);
+		if(menuElem->properties.valueType != VALUE_TYPE_NONE)
+		{
+			if(strlen(lineToDisplay) < sizeof(lineToDisplay) - 1)
+				strcat(lineToDisplay, ": ");
+			AppendValueToLine(menuElem, lineToDisplay, sizeof(lineToDisplay) - 1);
+		}
+
 		ST7920_SendText(lineToDisplay, 0, i);
 		if(menuElem->next == NULL)
 			break;
@@ -222,6 +231,35 @@ void Menu_InvokeAction()
 		Menu_GoToSubmenu();
 	else if(currentMenu->parent != NULL)
 		Menu_GoToParent();
+}
+
+static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize)
+{
+	//prepare the buffer for appending
+	buffSize -= strlen(buff);
+	buff += strlen(buff);
+
+	//save converted value to the buffer
+	switch(element->properties.valueType)
+	{
+	case VALUE_TYPE_WAVE_TYPE:
+	{
+		const char * waveName = "";
+		uint32_t val = element->value.uintData;
+		if(val == 0)
+			waveName = "sine";
+		else if(val == 1)
+			waveName = "square";
+		else if(val == 2)
+			waveName = "triangle";
+		else if(val == 3)
+			waveName = "sawtooth";
+		strncpy(buff, waveName, buffSize);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 static void Callback_WaveSetup_Type()
