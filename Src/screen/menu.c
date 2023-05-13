@@ -45,6 +45,7 @@ static const MenuElement menuRun;
 static const MenuElement menuMode;
 static const MenuElement waveSetup;
 static const MenuElement waveSetup_type;
+static const MenuElement waveSetup_return;
 
 static const MenuElement menuRun =
 {
@@ -68,7 +69,7 @@ static const MenuElement menuMode =
 
 static const MenuElement waveSetup =
 {
-		.text = "Wave Setup",
+		.text = "Wave Setup...",
 		.callback = NULL,
 		.parent = NULL,
 		.submenu = &waveSetup_type,
@@ -81,10 +82,14 @@ static const MenuElement waveSetup_type =
 		.text = "Type",
 		.properties.valueType = VALUE_TYPE_UINT,
 		.callback = Callback_WaveSetup_Type,
-		.parent = &menuRun,
-		.submenu = NULL,
-		.prev = NULL,
-		.next = NULL,
+		.next = &waveSetup_return,
+};
+
+static const MenuElement waveSetup_return =
+{
+	.text = "Return...",
+	.parent = &menuRun,
+	.prev = &waveSetup_type,
 };
 
 
@@ -201,10 +206,22 @@ void Menu_GoToSubmenu()
 	Lcd_RefreshRequest();
 }
 
+void Menu_GoToParent()
+{
+	if(currentMenu->parent == NULL)
+		return;
+	currentMenu = currentMenu->parent;
+	currentLine = 0;
+	clearBeforeDrawing = true;
+	Lcd_RefreshRequest();
+}
+
 void Menu_InvokeAction()
 {
 	if(currentMenu->submenu != NULL)
 		Menu_GoToSubmenu();
+	else if(currentMenu->parent != NULL)
+		Menu_GoToParent();
 }
 
 static void Callback_WaveSetup_Type()
