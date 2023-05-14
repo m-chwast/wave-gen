@@ -1,5 +1,6 @@
 #include <screen/menu/menu.h>
 #include <screen/menu/menu_elements.h>
+#include <screen/menu/menu_converter.h>
 #include "screen/lcd_ll.h"
 #include "screen/lcd.h"
 #include <string.h>
@@ -157,25 +158,5 @@ static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t
 	buffSize -= strlen(buff);
 	buff += strlen(buff);
 
-	//save converted value to the buffer
-	switch(element->properties.valueType)
-	{
-	case VALUE_TYPE_WAVE_TYPE:
-	{
-		const char * waveName = "";
-		uint32_t val = element->value.uintData;
-		if(val == 0)
-			waveName = "sine";
-		else if(val == 1)
-			waveName = "square";
-		else if(val == 2)
-			waveName = "triangle";
-		else if(val == 3)
-			waveName = "sawtooth";
-		strncpy(buff, waveName, buffSize);
-		break;
-	}
-	default:
-		break;
-	}
+	Menu_WriteValueToStr(element, buff, buffSize);
 }
