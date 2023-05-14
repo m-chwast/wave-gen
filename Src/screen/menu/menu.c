@@ -7,6 +7,7 @@
 
 
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize);
+static void InvokeCallback();
 
 
 //initialize with start menu
@@ -146,10 +147,18 @@ void Menu_GoToParent()
 
 void Menu_InvokeAction()
 {
+	InvokeCallback();
+
 	if(currentMenu->submenu != NULL)
 		Menu_GoToSubmenu();
 	else if(currentMenu->parent != NULL)
 		Menu_GoToParent();
+}
+
+static void InvokeCallback()
+{
+	if(currentMenu != NULL && currentMenu->callback != NULL)
+		currentMenu->callback();
 }
 
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize)
