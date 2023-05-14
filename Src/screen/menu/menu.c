@@ -60,7 +60,7 @@ void Menu_Display()
 		{
 			if(strlen(lineToDisplay) < sizeof(lineToDisplay) - 1)
 				strcat(lineToDisplay, ": ");
-			AppendValueToLine(menuElem, lineToDisplay, sizeof(lineToDisplay) - 1);
+			AppendValueToLine(menuElem, lineToDisplay, sizeof(lineToDisplay));
 		}
 
 		ST7920_SendText(lineToDisplay, 0, i);
