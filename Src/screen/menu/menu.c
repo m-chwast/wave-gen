@@ -72,7 +72,7 @@ void Menu_Display()
 	for(uint8_t i = 0; i < 4; i++)
 	{
 		memset(lineToDisplay, '\0', sizeof(lineToDisplay));
-		strcpy(lineToDisplay, (menuElem == currentMenu) ? ">" : " ");
+		strcpy(lineToDisplay, (menuElem == currentMenu) ? (editingValue ? "=" : ">") : " ");
 		strncat(lineToDisplay, menuElem->text, sizeof(lineToDisplay) - 2);
 		if(menuElem->properties.valueType != VALUE_TYPE_NONE)
 		{
