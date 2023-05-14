@@ -31,14 +31,14 @@ typedef union
 typedef struct MenuElementStruct
 {
 	const char * text;
-	MenuElementProperties properties;
+	const MenuElementProperties properties;
 	MenuElementValue value;
-	void (*callback)(void);
-	const struct MenuElementStruct * parent;
-	const struct MenuElementStruct * submenu;
-	const struct MenuElementStruct * prev;
-	const struct MenuElementStruct * next;
+	const void (*callback)(void);
+	struct MenuElementStruct * const parent;
+	struct MenuElementStruct * const submenu;
+	struct MenuElementStruct * const prev;
+	struct MenuElementStruct * const next;
 } MenuElement;
 
 
-extern const MenuElement * const MenuElements_initialMenuElement;
+extern MenuElement * const MenuElements_initialMenuElement;
