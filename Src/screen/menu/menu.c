@@ -8,11 +8,13 @@
 
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize);
 static void InvokeCallback();
+static void ChangeValue(bool increment);
 
 
 //initialize with start menu
 static const MenuElement * currentMenu = NULL;
 static uint8_t currentLine = 0;
+static bool editingValue = false;
 static bool clearBeforeDrawing = true;
 
 
@@ -73,6 +75,13 @@ void Menu_Display()
 
 void Menu_SelectNext()
 {
+	//handle value changes
+	if(editingValue == true)
+	{
+		ChangeValue(true);
+		return;
+	}
+
 	if(currentLine < 3)
 		currentLine++;
 	else
@@ -95,6 +104,13 @@ void Menu_SelectNext()
 
 void Menu_SelectPrev()
 {
+	//handle value changes
+	if(editingValue == true)
+	{
+		ChangeValue(false);
+		return;
+	}
+
 	if(currentLine > 0)
 		currentLine--;
 
@@ -149,6 +165,12 @@ void Menu_InvokeAction()
 {
 	InvokeCallback();
 
+	if(currentMenu->properties.valueType != VALUE_TYPE_NONE)
+	{
+		editingValue = !editingValue;
+		Lcd_RefreshRequest();
+	}
+
 	if(currentMenu->submenu != NULL)
 		Menu_GoToSubmenu();
 	else if(currentMenu->parent != NULL)
@@ -160,6 +182,15 @@ static void InvokeCallback()
 	if(currentMenu != NULL && currentMenu->callback != NULL)
 		currentMenu->callback();
 }
+
+static void ChangeValue(bool increment)
+{
+	//TODO
+
+	InvokeCallback();
+	Lcd_RefreshRequest();
+}
+
 
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize)
 {
