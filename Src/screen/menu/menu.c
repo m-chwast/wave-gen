@@ -12,7 +12,7 @@ static void ChangeValue(bool increment);
 
 
 //initialize with start menu
-static const MenuElement * currentMenu = NULL;
+static MenuElement * currentMenu = NULL;
 static uint8_t currentLine = 0;
 static bool editingValue = false;
 static bool clearBeforeDrawing = true;
@@ -93,7 +93,7 @@ void Menu_SelectNext()
 	}
 	else
 	{
-		const MenuElement * tmp = currentMenu;
+		MenuElement * tmp = currentMenu;
 		while(tmp->prev != NULL)
 			tmp = tmp->prev;
 		currentLine = 0;
@@ -120,7 +120,7 @@ void Menu_SelectPrev()
 	}
 	else
 	{
-		const MenuElement * tmp = currentMenu;
+		MenuElement * tmp = currentMenu;
 		uint8_t menuCnt = 0;
 		while(tmp->next != NULL)
 		{
@@ -185,7 +185,7 @@ static void InvokeCallback()
 
 static void ChangeValue(bool increment)
 {
-	//TODO
+	Menu_ChangeValue(increment, currentMenu);
 
 	InvokeCallback();
 	Lcd_RefreshRequest();

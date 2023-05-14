@@ -3,3 +3,4 @@
 #include "screen/menu/menu_elements.h"
 
 void Menu_WriteValueToStr(const MenuElement * element, char * str, uint32_t maxChars);
+void Menu_ChangeValue(bool increase, MenuElement * element);
