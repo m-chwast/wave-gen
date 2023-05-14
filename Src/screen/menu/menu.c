@@ -16,6 +16,7 @@ static MenuElement * currentMenu = NULL;
 static uint8_t currentLine = 0;
 static bool editingValue = false;
 static bool clearBeforeDrawing = true;
+static bool valueChanged = false;
 
 
 static const MenuElement * FindFirstElemToDisplay()
@@ -52,7 +53,21 @@ void Menu_Display()
 		clearBeforeDrawing = false;
 	}
 
-	char lineToDisplay[16] = {0};
+	char lineToDisplay[17] = {0};
+
+	if(valueChanged == true)
+	{
+		uint8_t nameLen = strlen(currentMenu->text) + 1 + 2;
+		uint8_t valLen = 16 - nameLen;
+		if(valLen % 2)
+		{
+			valLen--;
+			nameLen++;
+		}
+		memset(lineToDisplay, ' ', valLen);
+		ST7920_SendText(lineToDisplay, nameLen, currentLine);
+		valueChanged = false;
+	}
 
 	for(uint8_t i = 0; i < 4; i++)
 	{
@@ -188,6 +203,8 @@ static void ChangeValue(bool increment)
 	Menu_ChangeValue(increment, currentMenu);
 
 	InvokeCallback();
+
+	valueChanged = true;
 	Lcd_RefreshRequest();
 }
 
