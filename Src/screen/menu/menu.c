@@ -61,8 +61,8 @@ void Menu_Display()
 		uint8_t valLen = 16 - nameLen;
 		if(valLen % 2)
 		{
-			valLen--;
-			nameLen++;
+			valLen++;
+			nameLen--;
 		}
 		memset(lineToDisplay, ' ', valLen);
 		ST7920_SendText(lineToDisplay, nameLen, currentLine);
