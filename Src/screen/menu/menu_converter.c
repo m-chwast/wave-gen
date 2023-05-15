@@ -95,21 +95,45 @@ static void ValueChangeWaveType(bool increase, Encoder_Speed speed, MenuElement 
 
 static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars)
 {
+	uint32_t tmp = val;
 	uint8_t i = 0;
 	do
 	{
-		str[i] = '0' + (val % 10);
-		val /= 10;
+		str[i] = '0' + (tmp % 10);
+		tmp /= 10;
 		i++;
-	} while(val > 0 && i < maxChars);
+	} while(tmp > 0 && i < maxChars);
 	StrInvert(str);
-
 	str[i] = '\0';
-	if(maxChars - i >= 3)
-		strcat(str, " ");
-	if(maxChars - i >= 2)
-		strcat(str, "Hz");
 
+	if(val < 10000)
+	{
+		if(maxChars - i >= 3)
+			strcat(str, " ");
+		if(maxChars - i >= 2)
+			strcat(str, "Hz");
+	}
+	else
+	{
+		int8_t len = strlen(str);
+		int8_t dot = len - 3;
+		if(dot < 0 || len < 4)
+			return;
+
+		uint8_t pos = dot;
+		if(dot < 3)
+		{
+			char tmp = str[dot];
+			str[dot] = '.';
+			str[dot + 1] = tmp;
+			pos = dot + 2;
+		}
+		str[pos] = '\0';
+
+		if(pos + 4 < len)
+			return;
+		strcat(str, " kHz");
+	}
 }
 
 static void ValueChangeFrequency(bool increase, Encoder_Speed speed, MenuElement * element)
