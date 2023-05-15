@@ -106,17 +106,25 @@ static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars)
 
 	str[i] = '\0';
 	if(maxChars - i >= 3)
-		strcat(str, " Hz");
+		strcat(str, " ");
+	if(maxChars - i >= 2)
+		strcat(str, "Hz");
+
 }
 
 static void ValueChangeFrequency(bool increase, MenuElement * element)
 {
-	uint32_t * val = (uint32_t *)element->value.data;
+	uint32_t newVal = *(uint32_t *)element->value.data;
 
 	if(increase)
-		(*val)++;
+		newVal++;
 	else
-		(*val)--;
+		newVal--;
+
+	if(newVal > 1000000)
+		newVal = 1000000;
+
+	*(uint32_t *)element->value.data = newVal;
 }
 
 static void StrInvert(char * str)
