@@ -118,6 +118,25 @@ static void ValueChangeFrequency(bool increase, Encoder_Speed speed, MenuElement
 
 	int32_t step = increase ? 1 : -1;
 
+	if(newVal > 100000)
+	{
+		if(newVal % 1000)
+			newVal = (newVal / 1000) * 1000;
+		step *= 1000;
+	}
+	else if(newVal > 10000)
+	{
+		if(newVal % 100)
+			newVal = (newVal / 100) * 100;
+		step *= 100;
+	}
+	else if(newVal > 1000)
+	{
+		if(newVal % 10)
+			newVal = (newVal / 10) * 10;
+		step *= 10;
+	}
+
 	switch(speed)
 	{
 		case ENCODER_SPEED_MEDIUM:
