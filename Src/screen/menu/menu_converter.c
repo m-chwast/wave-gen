@@ -5,9 +5,9 @@
 
 static void StrInvert(char * str);
 static void WriteWaveType(WaveType val, char * str, uint32_t maxChars);
-static void ValueChangeWaveType(bool increase, MenuElement * element);
+static void ValueChangeWaveType(bool increase, Encoder_Speed speed, MenuElement * element);
 static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars);
-static void ValueChangeFrequency(bool increase, MenuElement * element);
+static void ValueChangeFrequency(bool increase, Encoder_Speed speed, MenuElement * element);
 
 
 void Menu_WriteValueToStr(const MenuElement * element, char * str, uint32_t maxChars)
@@ -29,18 +29,18 @@ void Menu_WriteValueToStr(const MenuElement * element, char * str, uint32_t maxC
 	}
 }
 
-void Menu_ChangeValue(bool increase, MenuElement * element)
+void Menu_ChangeValue(bool increase, Encoder_Speed speed, MenuElement * element)
 {
 	switch(element->properties.valueType)
 	{
 		case VALUE_TYPE_WAVE_TYPE:
 		{
-			ValueChangeWaveType(increase, element);
+			ValueChangeWaveType(increase, speed, element);
 			break;
 		}
 		case VALUE_TYPE_FREQUENCY:
 		{
-			ValueChangeFrequency(increase, element);
+			ValueChangeFrequency(increase, speed, element);
 			break;
 		}
 		default:
@@ -75,7 +75,7 @@ static void WriteWaveType(WaveType val, char * str, uint32_t maxChars)
 }
 
 
-static void ValueChangeWaveType(bool increase, MenuElement * element)
+static void ValueChangeWaveType(bool increase, Encoder_Speed speed, MenuElement * element)
 {
 	WaveType newVal = *(WaveType *)element->value.data;
 	if(increase)
@@ -112,17 +112,31 @@ static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars)
 
 }
 
-static void ValueChangeFrequency(bool increase, MenuElement * element)
+static void ValueChangeFrequency(bool increase, Encoder_Speed speed, MenuElement * element)
 {
-	uint32_t newVal = *(uint32_t *)element->value.data;
+	int32_t newVal = *(uint32_t *)element->value.data;
 
-	if(increase)
-		newVal++;
-	else
-		newVal--;
+	int32_t step = increase ? 1 : -1;
+
+	switch(speed)
+	{
+		case ENCODER_SPEED_MEDIUM:
+			step *= 10;
+			break;
+		case ENCODER_SPEED_HIGH:
+			step *= 100;
+			break;
+		default:
+			break;
+	}
+
+
+	newVal += step;
 
 	if(newVal > 1000000)
 		newVal = 1000000;
+	if(newVal < 0)
+		newVal = 0;
 
 	*(uint32_t *)element->value.data = newVal;
 }

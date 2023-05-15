@@ -145,9 +145,9 @@ static void ProcessEncoderState()
 		return;
 
 	if(encoderMovement.dir == ENCODER_DIR_LEFT)
-		Menu_SelectPrev();
+		Menu_SelectPrev(encoderMovement.speed);
 	else if(encoderMovement.dir == ENCODER_DIR_RIGHT)
-		Menu_SelectNext();
+		Menu_SelectNext(encoderMovement.speed);
 }
 
 static void LogEncoderParams()
