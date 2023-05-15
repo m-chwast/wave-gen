@@ -28,6 +28,7 @@
 #include "logging.h"
 #include "encoder.h"
 #include "screen/lcd.h"
+#include "screen/menu/menu_elements.h"
 #include "serial_receiver.h"
 
 /* USER CODE END Includes */
@@ -80,6 +81,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  Menu_InitializeElements();
 
   /* USER CODE END Init */
 

@@ -26,6 +26,7 @@ typedef union
 	int32_t intData;
 	float floatData;
 	bool boolData;
+	void * data;
 } MenuElementValue;
 
 typedef struct MenuElementStruct
@@ -42,3 +43,6 @@ typedef struct MenuElementStruct
 
 
 extern MenuElement * const MenuElements_initialMenuElement;
+
+
+void Menu_InitializeElements();

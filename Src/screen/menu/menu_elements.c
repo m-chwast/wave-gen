@@ -1,8 +1,6 @@
 #include <screen/menu/menu_elements.h>
+#include <wave/wave_config.h>
 #include <stdlib.h>
-
-
-static void Callback_WaveSetup_Type();
 
 
 static MenuElement menuRun;
@@ -48,7 +46,6 @@ static MenuElement waveSetup_type =
 {
 		.text = "Type",
 		.properties.valueType = VALUE_TYPE_WAVE_TYPE,
-		.callback = Callback_WaveSetup_Type,
 		.next = &waveSetup_frequency,
 };
 
@@ -68,7 +65,8 @@ static MenuElement waveSetup_return =
 };
 
 
-static void Callback_WaveSetup_Type()
+void Menu_InitializeElements()
 {
-
+	waveSetup_type.value.data = &(waveConfig->type);
+	waveSetup_frequency.value.data = &(waveConfig->freq);
 }

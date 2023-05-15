@@ -1,8 +1,9 @@
 #include "screen/menu/menu_converter.h"
+#include "wave/wave_config.h"
 #include <string.h>
 
 
-static void WriteWaveType(uint32_t val, char * str, uint32_t maxChars);
+static void WriteWaveType(WaveType val, char * str, uint32_t maxChars);
 static void ValueChangeWaveType(bool increase, MenuElement * element);
 
 void Menu_WriteValueToStr(const MenuElement * element, char * str, uint32_t maxChars)
@@ -11,7 +12,7 @@ void Menu_WriteValueToStr(const MenuElement * element, char * str, uint32_t maxC
 	{
 		case VALUE_TYPE_WAVE_TYPE:
 		{
-			WriteWaveType(element->value.uintData, str, maxChars);
+			WriteWaveType(*(WaveType *)(element->value.data), str, maxChars);
 			break;
 		}
 		default:
@@ -35,36 +36,45 @@ void Menu_ChangeValue(bool increase, MenuElement * element)
 	}
 }
 
-static void WriteWaveType(uint32_t val, char * str, uint32_t maxChars)
+static void WriteWaveType(WaveType val, char * str, uint32_t maxChars)
 {
 	const char * waveName = "";
-	if(val == 0)
-		waveName = "sine";
-	else if(val == 1)
-		waveName = "square";
-	else if(val == 2)
-		waveName = "triangle";
-	else if(val == 3)
-		waveName = "sawtooth";
+	switch(val)
+	{
+		case WAVE_TYPE_SINE:
+			waveName = "sine";
+			break;
+		case WAVE_TYPE_SQUARE:
+			waveName = "square";
+			break;
+		case WAVE_TYPE_TRIANGLE:
+			waveName = "triangle";
+			break;
+		case WAVE_TYPE_SAWTOOTH:
+			waveName = "sawtooth";
+			break;
+		default:
+			waveName = "undef";
+			break;
+	}
 	strncpy(str, waveName, maxChars);
 }
 
 
 static void ValueChangeWaveType(bool increase, MenuElement * element)
 {
-	uint32_t newVal = element->value.uintData;
+	WaveType newVal = *(WaveType *)element->value.data;
 	if(increase)
 	{
 		newVal++;
-		newVal %= 4;	//3 is max value
+		newVal %= WAVE_TYPE_CNT;
 	}
 	else
 	{
 		if(newVal > 0)
 			newVal--;
 		else
-			newVal = 3;
+			newVal = WAVE_TYPE_CNT - 1;
 	}
-	element->value.uintData = newVal;
-
+	*(WaveType *)element->value.data = newVal;
 }

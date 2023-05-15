@@ -3,4 +3,4 @@
 
 static WaveConfig config;
 
-WaveConfig * waveConfig = &config;
+WaveConfig * const waveConfig = &config;

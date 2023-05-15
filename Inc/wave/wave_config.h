@@ -17,4 +17,4 @@ typedef struct
 	uint32_t freq;
 } WaveConfig;
 
-extern WaveConfig * waveConfig;
+extern WaveConfig * const waveConfig;
