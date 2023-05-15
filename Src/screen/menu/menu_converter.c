@@ -3,6 +3,7 @@
 #include <string.h>
 
 
+static void StrInvert(char * str);
 static void WriteWaveType(WaveType val, char * str, uint32_t maxChars);
 static void ValueChangeWaveType(bool increase, MenuElement * element);
 static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars);
@@ -101,6 +102,7 @@ static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars)
 		val /= 10;
 		i++;
 	} while(val > 0 && i < maxChars);
+	StrInvert(str);
 
 	str[i] = '\0';
 	if(maxChars - i >= 3)
@@ -115,4 +117,15 @@ static void ValueChangeFrequency(bool increase, MenuElement * element)
 		(*val)++;
 	else
 		(*val)--;
+}
+
+static void StrInvert(char * str)
+{
+	uint8_t len = strlen(str);
+	for(uint8_t i = 0; i < len / 2; i++)
+	{
+		char tmp = str[i];
+		str[i] = str[len - 1 - i];
+		str[len - 1 - i] = tmp;
+	}
 }
