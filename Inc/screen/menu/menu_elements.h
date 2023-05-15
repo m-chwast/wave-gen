@@ -12,6 +12,7 @@ typedef enum
 	VALUE_TYPE_FLOAT,
 	VALUE_TYPE_BOOL,
 	VALUE_TYPE_WAVE_TYPE,
+	VALUE_TYPE_FREQUENCY,
 } MenuElementValueType;
 
 typedef struct

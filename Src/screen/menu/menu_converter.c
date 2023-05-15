@@ -5,6 +5,9 @@
 
 static void WriteWaveType(WaveType val, char * str, uint32_t maxChars);
 static void ValueChangeWaveType(bool increase, MenuElement * element);
+static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars);
+static void ValueChangeFrequency(bool increase, MenuElement * element);
+
 
 void Menu_WriteValueToStr(const MenuElement * element, char * str, uint32_t maxChars)
 {
@@ -13,6 +16,11 @@ void Menu_WriteValueToStr(const MenuElement * element, char * str, uint32_t maxC
 		case VALUE_TYPE_WAVE_TYPE:
 		{
 			WriteWaveType(*(WaveType *)(element->value.data), str, maxChars);
+			break;
+		}
+		case VALUE_TYPE_FREQUENCY:
+		{
+			WriteFrequency(*(uint32_t *)element->value.data, str, maxChars);
 			break;
 		}
 		default:
@@ -27,6 +35,11 @@ void Menu_ChangeValue(bool increase, MenuElement * element)
 		case VALUE_TYPE_WAVE_TYPE:
 		{
 			ValueChangeWaveType(increase, element);
+			break;
+		}
+		case VALUE_TYPE_FREQUENCY:
+		{
+			ValueChangeFrequency(increase, element);
 			break;
 		}
 		default:
@@ -77,4 +90,29 @@ static void ValueChangeWaveType(bool increase, MenuElement * element)
 			newVal = WAVE_TYPE_CNT - 1;
 	}
 	*(WaveType *)element->value.data = newVal;
+}
+
+static void WriteFrequency(uint32_t val, char * str, uint32_t maxChars)
+{
+	uint8_t i = 0;
+	do
+	{
+		str[i] = '0' + (val % 10);
+		val /= 10;
+		i++;
+	} while(val > 0 && i < maxChars);
+
+	str[i] = '\0';
+	if(maxChars - i >= 3)
+		strcat(str, " Hz");
+}
+
+static void ValueChangeFrequency(bool increase, MenuElement * element)
+{
+	uint32_t * val = (uint32_t *)element->value.data;
+
+	if(increase)
+		(*val)++;
+	else
+		(*val)--;
 }

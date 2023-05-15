@@ -212,7 +212,7 @@ static void ChangeValue(bool increment)
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize)
 {
 	//prepare the buffer for appending
-	buffSize -= strlen(buff);
+	buffSize -= strlen(buff) + 1;
 	buff += strlen(buff);
 
 	Menu_WriteValueToStr(element, buff, buffSize);

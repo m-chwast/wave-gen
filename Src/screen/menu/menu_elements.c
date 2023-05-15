@@ -52,7 +52,7 @@ static MenuElement waveSetup_type =
 static MenuElement waveSetup_frequency =
 {
 		.text = "Freq",
-		.properties.valueType = VALUE_TYPE_UINT,
+		.properties.valueType = VALUE_TYPE_FREQUENCY,
 		.prev = &waveSetup_type,
 		.next = &waveSetup_return,
 };
