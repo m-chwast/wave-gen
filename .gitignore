@@ -1,6 +1,5 @@
 Debug
 .settings
-STM32L152RETX_FLASH.ld
 STM32L152RETX_RAM.ld
 waveform_gen Debug.launch
 
