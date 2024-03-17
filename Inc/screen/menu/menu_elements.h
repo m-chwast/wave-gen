@@ -12,6 +12,7 @@ typedef enum
 	VALUE_TYPE_FLOAT,
 	VALUE_TYPE_BOOL,
 	VALUE_TYPE_WAVE_TYPE,
+	VALUE_TYPE_FREQUENCY,
 } MenuElementValueType;
 
 typedef struct
@@ -26,6 +27,7 @@ typedef union
 	int32_t intData;
 	float floatData;
 	bool boolData;
+	void * data;
 } MenuElementValue;
 
 typedef struct MenuElementStruct
@@ -42,3 +44,6 @@ typedef struct MenuElementStruct
 
 
 extern MenuElement * const MenuElements_initialMenuElement;
+
+
+void Menu_InitializeElements();

@@ -8,7 +8,7 @@
 
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize);
 static void InvokeCallback();
-static void ChangeValue(bool increment);
+static void ChangeValue(bool increase, Encoder_Speed speed);
 
 
 //initialize with start menu
@@ -61,8 +61,8 @@ void Menu_Display()
 		uint8_t valLen = 16 - nameLen;
 		if(valLen % 2)
 		{
-			valLen--;
-			nameLen++;
+			valLen++;
+			nameLen--;
 		}
 		memset(lineToDisplay, ' ', valLen);
 		ST7920_SendText(lineToDisplay, nameLen, currentLine);
@@ -88,12 +88,12 @@ void Menu_Display()
 	}
 }
 
-void Menu_SelectNext()
+void Menu_SelectNext(Encoder_Speed speed)
 {
 	//handle value changes
 	if(editingValue == true)
 	{
-		ChangeValue(true);
+		ChangeValue(true, speed);
 		return;
 	}
 
@@ -117,12 +117,12 @@ void Menu_SelectNext()
 	Lcd_RefreshRequest();
 }
 
-void Menu_SelectPrev()
+void Menu_SelectPrev(Encoder_Speed speed)
 {
 	//handle value changes
 	if(editingValue == true)
 	{
-		ChangeValue(false);
+		ChangeValue(false, speed);
 		return;
 	}
 
@@ -198,9 +198,9 @@ static void InvokeCallback()
 		currentMenu->callback();
 }
 
-static void ChangeValue(bool increment)
+static void ChangeValue(bool increase, Encoder_Speed speed)
 {
-	Menu_ChangeValue(increment, currentMenu);
+	Menu_ChangeValue(increase, speed, currentMenu);
 
 	InvokeCallback();
 
@@ -212,7 +212,7 @@ static void ChangeValue(bool increment)
 static void AppendValueToLine(const MenuElement * element, char * buff, uint32_t buffSize)
 {
 	//prepare the buffer for appending
-	buffSize -= strlen(buff);
+	buffSize -= strlen(buff) + 1;
 	buff += strlen(buff);
 
 	Menu_WriteValueToStr(element, buff, buffSize);
