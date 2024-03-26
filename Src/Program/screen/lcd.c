@@ -52,6 +52,9 @@ static void LcdTask()
 
 void Lcd_RefreshRequest()
 {
+	if(lcdRefreshSemaphore == NULL) {
+		return;
+	}
 	xSemaphoreGive(lcdRefreshSemaphore);
 }
 
