@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Tasks/task.h"
+#include "Tasks/task_base.h"
 #include "usart.h"
 #include <cstring>
 #include "Tasks/Logging/console.h"
