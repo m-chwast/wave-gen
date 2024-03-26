@@ -31,6 +31,8 @@
 #include "screen/menu/menu_elements.h"
 #include "serial_receiver.h"
 
+#include "Program/cprogram.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,6 +109,7 @@ int main(void)
   Setup_Lcd_CreateTask();
   Setup_SerialReceiver_CreateTask();
 
+  Program_CreateTasks();
 
   /* USER CODE END 2 */
 
