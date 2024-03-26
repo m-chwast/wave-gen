@@ -1,6 +1,7 @@
 #include "Program/cprogram.h"
 #include "Program/program.h"
 #include "FreeRTOS.h"
+#include "usart.h"
 
 
 //function called from C code
@@ -28,6 +29,11 @@ void operator delete[](void* p) {
 
 // program logic
 
-void Program::CreateTasks() {
+Console Program::_console;
+TaskLogging* Program::_taskLogging;
 
+void Program::CreateTasks() {
+	_taskLogging = new TaskLogging(huart2, _console);
+
+	_console.Write("Tasks created!\r\n");
 }
