@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <tim.h>
+#include "logging.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,12 +74,13 @@ void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTaskName);
 /* Functions needed when configGENERATE_RUN_TIME_STATS is on */
 __weak void configureTimerForRunTimeStats(void)
 {
-
+	htim6.Instance->CNT = 0;
+	tim6updateCnt = 0;
 }
 
 __weak unsigned long getRunTimeCounterValue(void)
 {
-return 0;
+	return htim6.Instance->CNT + 0xFFFF * tim6updateCnt;
 }
 /* USER CODE END 1 */
 
@@ -88,6 +90,9 @@ __weak void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTask
    /* Run time stack overflow checking is performed if
    configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2. This hook function is
    called if a stack overflow is detected. */
+	Logging_LogBlocking("Stack overflow! Task: ");
+	Logging_LogBlocking((char *)pcTaskName);
+	Logging_LogBlocking("\r\n");
 }
 /* USER CODE END 4 */
 

@@ -21,6 +21,8 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
+#include "logging.h"
+#include "serial_receiver.h"
 
 /* USER CODE END 0 */
 
@@ -80,6 +82,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+    /* USART2 interrupt Init */
+    HAL_NVIC_SetPriority(USART2_IRQn, 10, 0);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
 
   /* USER CODE END USART2_MspInit 1 */
@@ -103,6 +108,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOA, USART2_TX_Pin|USART2_RX_Pin);
 
+    /* USART2 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspDeInit 1 */
 
   /* USER CODE END USART2_MspDeInit 1 */
@@ -110,5 +117,30 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart)
+{
+	if(huart == &huart2)
+	{
+		ISR_LoggingUARTTx();
+	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart)
+{
+	if(huart == &huart2)
+	{
+		ISR_SerialReceiver_RxCplt();
+	}
+}
+
+bool UART_IsTransmitting(UART_HandleTypeDef * huart)
+{
+	HAL_UART_StateTypeDef state = HAL_UART_GetState(huart);
+	if(state == HAL_UART_STATE_BUSY_TX
+			|| state == HAL_UART_STATE_BUSY_TX_RX)
+		return true;
+	return false;
+}
 
 /* USER CODE END 1 */

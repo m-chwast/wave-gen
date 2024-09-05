@@ -65,12 +65,32 @@ void Error_Handler(void);
 #define USART2_RX_GPIO_Port GPIOA
 #define NUCLEO_LED_Pin GPIO_PIN_5
 #define NUCLEO_LED_GPIO_Port GPIOA
+#define ENC_A_Pin GPIO_PIN_6
+#define ENC_A_GPIO_Port GPIOA
+#define ENC_B_Pin GPIO_PIN_7
+#define ENC_B_GPIO_Port GPIOA
+#define LCD_E_Pin GPIO_PIN_1
+#define LCD_E_GPIO_Port GPIOB
+#define LCD_RS_Pin GPIO_PIN_2
+#define LCD_RS_GPIO_Port GPIOB
+#define LCD_RESET_Pin GPIO_PIN_11
+#define LCD_RESET_GPIO_Port GPIOB
+#define LCD_D4_Pin GPIO_PIN_12
+#define LCD_D4_GPIO_Port GPIOB
+#define LCD_D5_Pin GPIO_PIN_13
+#define LCD_D5_GPIO_Port GPIOB
+#define LCD_D6_Pin GPIO_PIN_14
+#define LCD_D6_GPIO_Port GPIOB
+#define LCD_D7_Pin GPIO_PIN_15
+#define LCD_D7_GPIO_Port GPIOB
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define ENC_SW_Pin GPIO_PIN_6
+#define ENC_SW_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
